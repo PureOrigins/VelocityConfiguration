@@ -89,11 +89,11 @@ private object ObjectWrapper : DefaultObjectWrapper(Configuration.DEFAULT_INCOMP
         is Float -> SimpleNumber(obj)
         is LocalDateTime -> SimpleDate(Date.from(obj.toInstant(ZoneOffset.UTC)), TemplateDateModel.DATETIME)
         is LocalDate -> SimpleDate(Date.from(obj.atStartOfDay().toInstant(ZoneOffset.UTC)), TemplateDateModel.DATE)
-        is LocalTime -> SimpleDate(Date.from(obj.atDate(LocalDate.EPOCH).toInstant(ZoneOffset.UTC)), TemplateDateModel.TIME)
+        is LocalTime -> SimpleDate(Date.from(obj.atDate(LocalDate.ofEpochDay(0)).toInstant(ZoneOffset.UTC)), TemplateDateModel.TIME)
         is Instant -> SimpleDate(Date.from(obj), TemplateDateModel.DATETIME)
         is ZonedDateTime -> SimpleDate(Date.from(obj.toInstant()), TemplateDateModel.DATETIME)
         is OffsetDateTime -> SimpleDate(Date.from(obj.toInstant()), TemplateDateModel.DATETIME)
-        is OffsetTime -> SimpleDate(Date.from(obj.atDate(LocalDate.EPOCH).toInstant()), TemplateDateModel.TIME)
+        is OffsetTime -> SimpleDate(Date.from(obj.atDate(LocalDate.ofEpochDay(0)).toInstant()), TemplateDateModel.TIME)
         is LinkedHashMap<*, *> -> DefaultMapAdapter.adapt(obj, this)
         else -> super.handleUnknownType(obj)
     }
