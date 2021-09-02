@@ -3,6 +3,7 @@ package it.pureorigins.velocityconfiguration
 import freemarker.core.CommonMarkupOutputFormat
 import freemarker.core.CommonTemplateMarkupOutputModel
 import freemarker.template.*
+import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
 import java.io.StringWriter
 import java.io.Writer
@@ -36,12 +37,14 @@ fun String.template(args: Map<String, Any?>, locale: Locale = Locale.ROOT) = tem
 
 fun String.template(vararg args: Pair<String, Any?>, locale: Locale = Locale.ROOT) = template(args.toMap(), locale)
 
-fun String.templateComponent(args: Map<String, Any?>, locale: Locale = Locale.ROOT) = GsonComponentSerializer.gson().deserialize(
-    template(args) {
-        this.locale = locale
-        outputFormat = JsonOutputFormat
-    }
-)
+fun String.templateComponent(args: Map<String, Any?>, locale: Locale = Locale.ROOT) = if (startsWith('{') || startsWith('[')) {
+    GsonComponentSerializer.gson().deserialize(
+        template(args) {
+            this.locale = locale
+            outputFormat = JsonOutputFormat
+        }
+    )
+} else Component.text(template(args, locale))
 
 fun String.templateComponent(vararg args: Pair<String, Any?>, locale: Locale = Locale.ROOT) = templateComponent(args.toMap(), locale)
 

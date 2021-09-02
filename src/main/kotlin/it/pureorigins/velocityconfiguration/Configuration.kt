@@ -11,6 +11,7 @@ import kotlin.reflect.typeOf
 
 val compactJson = Json {
     ignoreUnknownKeys = true
+    encodeDefaults = true
 }
 
 val json = Json(compactJson) {
